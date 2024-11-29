@@ -198,3 +198,42 @@ footer {
     margin-top: 50px;
     border-radius: 4px;
 }
+
+
+/* Like and Comment Buttons */
+.blog-actions {
+    margin-top: 10px;
+}
+
+.inline-form {
+    display: inline-block;
+}
+
+.like-btn, .comment-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-right: 5px;
+    text-decoration: none;
+}
+
+.like-btn:hover, .comment-btn:hover {
+    background-color: #0056b3;
+}
+
+.create-blog-btn {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.create-blog-btn:hover {
+    background-color: #218838;
+}
