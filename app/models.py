@@ -18,7 +18,7 @@ class Blog(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('blogs', lazy=True))
-    likes = db.Column(db.Integer, default=0)  # New column to track likes
+    # Removed likes column as it is now handled by the Like model
 
     def __repr__(self):
         return f"<Blog {self.title}>"
@@ -35,3 +35,14 @@ class Comment(db.Model):
 
     def __repr__(self):
         return f"<Comment {self.content[:20]}... by User {self.user_id}>"
+
+class Like(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    blog_id = db.Column(db.Integer, db.ForeignKey('blog.id'), nullable=False)
+
+    user = db.relationship('User', backref=db.backref('likes', lazy=True))
+    blog = db.relationship('Blog', backref=db.backref('likes', lazy=True))
+
+    def __repr__(self):
+        return f"<Like {self.user_id} liked {self.blog_id}>"

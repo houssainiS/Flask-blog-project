@@ -31,44 +31,41 @@
     
     <ul>
         {% for blog in blogs %}
-            <li>
+            <li style="position: relative; padding-bottom: 50px;">  <!-- Add some padding to give space for buttons -->
                 <h3>{{ blog.title }}</h3>
                 <p>{{ blog.content[:100] }}...</p>  <!-- Show a snippet of the content -->
                 <p><small>Posted by {{ blog.user.username }} on {{ blog.created_at.strftime('%Y-%m-%d') }}</small></p>
                 
-                <!-- Blog actions -->
+                <!-- Like and Comment buttons -->
                 <div class="blog-actions">
+                    
                     <!-- Like button -->
-                    <form action="{{ url_for('main.like_blog', blog_id=blog.id) }}" method="POST" style="display: inline;">
-                        <button type="submit">
-                            👍 Like ({{ blog.likes or 0 }}) <!-- Show like count -->
-                        </button>
-                    </form>
+<form action="{{ url_for('main.like_blog', blog_id=blog.id) }}" method="POST" class="inline-form">
+    <button type="submit" class="like-btn">
+        Like ({{ blog.likes|length }}) <!-- Dynamic like count -->
+    </button>
+</form>
+
 
                     <!-- Comment button -->
-                    <a href="{{ url_for('main.view_blog', blog_id=blog.id) }}">💬 Comment</a>
+                    <a href="{{ url_for('main.view_blog', blog_id=blog.id) }}" class="comment-btn">Comment</a>
                 </div>
                 
-                <!-- Edit/Delete options for blog owner -->
+                <!-- Delete button for the owner of the blog -->
                 {% if current_user.is_authenticated and current_user.id == blog.user_id %}
-                    <div class="owner-actions">
-                    <!--  <a href="{{ url_for('main.edit_blog', blog_id=blog.id) }}">✏️ Edit</a>  -->    
-                        <form action="{{ url_for('main.delete_blog', blog_id=blog.id) }}" method="POST" style="display: inline;">
-                            <button type="submit">🗑️ Delete</button>
-                        </form>
-                    </div>
+                    <form action="{{ url_for('main.delete_blog', blog_id=blog.id) }}" method="POST" class="inline-form">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
                 {% endif %}
                 
-                <!-- View full blog -->
-                <a href="{{ url_for('main.view_blog', blog_id=blog.id) }}">Read More</a>
+                <a href="{{ url_for('main.view_blog', blog_id=blog.id) }}">View</a>
             </li>
         {% endfor %}
     </ul>
 
-    <!-- Create New Blog Button -->
+    <br>
     {% if current_user.is_authenticated %}
-        <br>
-        <a href="{{ url_for('main.create_blog') }}">➕ Create New Blog</a>
+        <a href="{{ url_for('main.create_blog') }}">Create New Blog</a>
     {% endif %}
 </body>
 </html>

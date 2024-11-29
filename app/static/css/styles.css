@@ -237,3 +237,47 @@ footer {
 .create-blog-btn:hover {
     background-color: #218838;
 }
+
+/* Style for the blog post actions container */
+.blog-actions {
+    position: absolute;
+    bottom: 10px; /* Position 10px from the bottom */
+    right: 10px;  /* Position 10px from the right */
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}
+
+/* Style for individual buttons */
+.like-btn, .comment-btn, .delete-btn {
+    padding: 8px 16px;
+    background-color: #4CAF50; /* Green color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.like-btn:hover, .comment-btn:hover, .delete-btn:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Style for the comment link to make it look like a button */
+.comment-btn {
+    background-color: #008CBA; /* Blue color */
+}
+
+.comment-btn:hover {
+    background-color: #007bb5; /* Darker blue on hover */
+}
+
+/* Delete button color change for delete action */
+.delete-btn {
+    background-color: #f44336; /* Red color */
+}
+
+.delete-btn:hover {
+    background-color: #e53935; /* Darker red on hover */
+}
+

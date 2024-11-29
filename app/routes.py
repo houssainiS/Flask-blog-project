@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
-from app.models import User, Blog, Comment  # Import Comment model
+from app.models import Blog, User, Comment, Like  # Add Like here
+
 
 main = Blueprint('main', __name__)
 
@@ -148,11 +149,23 @@ def logout():
     return redirect(url_for('main.login'))
 
 # Like a blog
+# Like a blog
 @main.route('/like/<int:blog_id>', methods=['POST'])
 @login_required
 def like_blog(blog_id):
     blog = Blog.query.get_or_404(blog_id)
-    blog.likes += 1
-    db.session.commit()
-    flash('You liked this blog!', 'success')
-    return redirect(url_for('main.view_blog', blog_id=blog.id))
+
+    # Check if the user has already liked the blog
+    existing_like = Like.query.filter_by(user_id=current_user.id, blog_id=blog.id).first()
+
+    if existing_like:
+        flash('You have already liked this blog.', 'info')
+    else:
+        # Add the like if it doesn't exist
+        new_like = Like(user_id=current_user.id, blog_id=blog.id)
+        db.session.add(new_like)
+        db.session.commit()
+        flash('You liked this blog!', 'success')
+
+    return redirect(url_for('main.home'))
+
