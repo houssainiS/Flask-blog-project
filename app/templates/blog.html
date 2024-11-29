@@ -10,10 +10,10 @@
     <!-- Navbar (You can customize it as needed) -->
     <nav>
         <ul>
-            <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            <li><a href="{{ url_for('main.home') }}">Home</a></li>  <!-- Updated to match 'home' route -->
             {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('main.logout') }}">Logout</a></li>
-                <li><a href="{{ url_for('main.new_blog') }}">New Blog</a></li>
+                <li><a href="{{ url_for('main.create_blog') }}">New Blog</a></li>  <!-- Updated to match 'create_blog' route -->
             {% else %}
                 <li><a href="{{ url_for('main.login') }}">Login</a></li>
                 <li><a href="{{ url_for('main.register') }}">Register</a></li>
@@ -27,12 +27,12 @@
         {% for blog in blogs %}
             <div class="blog-post">
                 <h2>{{ blog.title }}</h2>
-                <p>{{ blog.content }}</p>
+                <p>{{ blog.content[:200] }}...</p> <!-- Show snippet of the blog content -->
                 <small>Posted by {{ blog.user.username }}</small>
                 
                 <!-- Show delete button only if the current user is the owner of the blog -->
                 {% if current_user.id == blog.user_id %}
-                    <form action="{{ url_for('main.delete_blog', id=blog.id) }}" method="POST">
+                    <form action="{{ url_for('main.delete_blog', blog_id=blog.id) }}" method="POST">  <!-- Fixed 'delete_blog' route -->
                         <button type="submit">Delete</button>
                     </form>
                 {% endif %}
