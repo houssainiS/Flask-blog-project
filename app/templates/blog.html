@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Navbar (You can customize it as needed) -->
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('main.logout') }}">Logout</a></li>
+                <li><a href="{{ url_for('main.new_blog') }}">New Blog</a></li>
+            {% else %}
+                <li><a href="{{ url_for('main.login') }}">Login</a></li>
+                <li><a href="{{ url_for('main.register') }}">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="blog-container">
+        <h1>All Blog Posts</h1>
+
+        {% for blog in blogs %}
+            <div class="blog-post">
+                <h2>{{ blog.title }}</h2>
+                <p>{{ blog.content }}</p>
+                <small>Posted by {{ blog.user.username }}</small>
+                
+                <!-- Show delete button only if the current user is the owner of the blog -->
+                {% if current_user.id == blog.user_id %}
+                    <form action="{{ url_for('main.delete_blog', id=blog.id) }}" method="POST">
+                        <button type="submit">Delete</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if not blogs %}
+            <p>No blogs available.</p>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Blog Platform. All rights reserved.</p>
+    </footer>
+</body>
+</html>
