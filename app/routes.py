@@ -13,9 +13,14 @@ def register():
     if request.method == "POST":
         username = request.form.get('username')
         password = request.form.get('password')
+        role = request.form.get('role')  # Get the selected role
+        
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
 
-        user = User(username=username, password=hashed_password)
+        # Set is_admin based on the selected role
+        is_admin = True if role == 'admin' else False
+
+        user = User(username=username, password=hashed_password, is_admin=is_admin)
         db.session.add(user)
         db.session.commit()
 
@@ -23,6 +28,7 @@ def register():
         return redirect(url_for('main.login'))
 
     return render_template('register.html')
+
 
 # Login route
 @main.route("/login", methods=["GET", "POST"])

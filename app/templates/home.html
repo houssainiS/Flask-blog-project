@@ -29,7 +29,8 @@
     <!-- create Button -->
     {% if current_user.is_authenticated %}
     <a href="{{ url_for('main.create_blog') }}">Create New Blog</a>
-{% endif %}
+    {% endif %}
+    
     <!-- Flash Messages -->
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -60,20 +61,19 @@
                     <!-- Comment button -->
                     <a href="{{ url_for('main.view_blog', blog_id=blog.id) }}" class="comment-btn">Comment</a>
                 </div>
-                
-                <!-- Delete button for the owner of the blog -->
-                {% if current_user.is_authenticated and current_user.id == blog.user_id %}
+
+                <!-- Delete button for the owner of the blog or an admin -->
+                {% if current_user.is_authenticated and (current_user.id == blog.user_id or current_user.is_admin) %}
                     <form action="{{ url_for('main.delete_blog', blog_id=blog.id) }}" method="POST" class="inline-form" onsubmit="confirmDelete(event)">
                         <button type="submit" class="delete-btn">Delete</button>
                     </form>
                 {% endif %}
-                
+
                 <a href="{{ url_for('main.view_blog', blog_id=blog.id) }}">View</a>
             </li>
         {% endfor %}
     </ul>
 
     <br>
-    
 </body>
 </html>
