@@ -115,7 +115,15 @@ def edit_blog(blog_id):
 def delete_blog(blog_id):
     blog = Blog.query.get_or_404(blog_id)
     if blog.user_id == current_user.id or current_user.is_admin:
-        db.session.delete(blog)
+        # Delete all comments associated with this blog
+        for comment in blog.comments:
+            db.session.delete(comment)  # Delete each comment
+
+        # Delete all likes associated with this blog
+        for like in blog.likes:
+            db.session.delete(like)  # Delete each like
+
+        db.session.delete(blog)  # Now delete the blog itself
         db.session.commit()
         flash('Blog Deleted Successfully!', 'danger')
     else:
@@ -133,13 +141,21 @@ def admin():
     blogs = Blog.query.all()
     return render_template('admin.html', blogs=blogs)
 
-# Delete blog from admin route
-@main.route("/delete_blog/<int:blog_id>")
+# Delete blog from admin route (with unique endpoint)
+@main.route("/delete_blog/<int:blog_id>", endpoint='delete_blog_from_admin')
 @login_required
 def delete_blog_from_admin(blog_id):
     blog = Blog.query.get_or_404(blog_id)
-    if blog.user_id == current_user.id or current_user.is_admin:
-        db.session.delete(blog)
+    if current_user.is_admin:
+        # Delete all comments associated with this blog
+        for comment in blog.comments:
+            db.session.delete(comment)  # Delete each comment
+
+        # Delete all likes associated with this blog
+        for like in blog.likes:
+            db.session.delete(like)  # Delete each like
+
+        db.session.delete(blog)  # Now delete the blog itself
         db.session.commit()
         flash("Blog deleted", "success")
     else:
@@ -154,7 +170,6 @@ def logout():
     flash("You have been logged out.", "info")
     return redirect(url_for('main.login'))
 
-# Like a blog
 # Like a blog
 @main.route('/like/<int:blog_id>', methods=['POST'])
 @login_required
@@ -174,4 +189,3 @@ def like_blog(blog_id):
         flash('You liked this blog!', 'success')
 
     return redirect(url_for('main.home'))
-
