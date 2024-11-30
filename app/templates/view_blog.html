@@ -21,8 +21,8 @@
         <p>{{ blog.content }}</p>
         <p><small>Posted by {{ blog.user.username }} on {{ blog.created_at.strftime('%Y-%m-%d') }}</small></p>
         
-        <!-- Edit/Delete options for blog owner -->
-        {% if current_user.is_authenticated and current_user.id == blog.user_id %}
+        <!-- Edit/Delete options for blog owner or admin -->
+        {% if current_user.is_authenticated and (current_user.id == blog.user_id or current_user.is_admin) %}
             <div class="owner-actions">
                 <!-- <a href="{{ url_for('main.edit_blog', blog_id=blog.id) }}">✏️ Edit</a> -->
                 <form action="{{ url_for('main.delete_blog', blog_id=blog.id) }}" method="POST" style="display: inline;" onsubmit="confirmDelete(event)">
@@ -31,15 +31,6 @@
             </div>
         {% endif %}
 
-        <!-- Like button
-        {% if current_user.is_authenticated %}
-            <form action="{{ url_for('main.like_blog', blog_id=blog.id) }}" method="POST" style="display: inline;">
-                <button type="submit">👍 Like ({{ blog.likes if blog.likes is not none else 0 }})</button>  
-            </form>
-        {% else %}
-            <p><em>Login to like this post.</em></p>
-        {% endif %}
- -->
         <!-- Comments Section -->
         <div class="comments-section">
             <h2>Comments</h2>
